@@ -23,15 +23,10 @@ namespace SpawnLights
             surfaceRoom.TurnOffLights(0.25f);
 
             if (ev.NextKnownTeam == SpawnableTeamType.NineTailedFox)
-            {
                 surfaceRoom.Color = Color.blue;
-                Log.Debug("mtf");
-            }
+
             if (ev.NextKnownTeam == SpawnableTeamType.ChaosInsurgency)
-            {
                 surfaceRoom.Color = Color.green;
-                Log.Debug("chi");
-            }
 
             Timing.CallDelayed(Plugin.Instance.Config.LightTime, () =>
             {
