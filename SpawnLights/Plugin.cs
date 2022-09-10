@@ -1,46 +1,44 @@
 ﻿using Exiled.API.Features;
 using System;
-using Server = Exiled.Events.Handlers.Server;
+using SpawnLights.Events;
 
 namespace SpawnLights
 {
-    internal class Plugin : Plugin<Config>
+    public class Plugin : Plugin<Config>
     {
-        private EventHandlers _events;
-        public static Plugin Instance;
-
-        public override string Name => "SpawnLights";
-
-        public override string Author => "Heisenberg3666";
-
-        public override Version Version => new Version(1, 0, 0, 0);
-
-        public override Version RequiredExiledVersion => new Version(5, 1, 3);
+        private ServerEvents _serverEvents;
+        
+        public override string Name { get; } = "SpawnLights";
+        public override string Author { get; } = "Heisenberg3666";
+        public override Version Version { get; } = new Version(1, 0, 0, 0);
+        public override Version RequiredExiledVersion { get; } = new Version(5, 3, 0);
 
         public override void OnEnabled()
         {
-            base.OnEnabled();
-            Instance = this;
-            _events = new EventHandlers();
+            _serverEvents = new ServerEvents(Config);
+            
             RegisterEvents();
+            
+            base.OnEnabled();
         }
 
         public override void OnDisabled()
         {
             UnregisterEvents();
-            _events = null;
-            Instance = null;
+
+            _serverEvents = null;
+            
             base.OnDisabled();
         }
 
-        public void RegisterEvents()
+        private void RegisterEvents()
         {
-            Server.RespawningTeam += _events.OnTeamRespawn;
+            _serverEvents.RegisterEvents();
         }
 
-        public void UnregisterEvents()
+        private void UnregisterEvents()
         {
-            Server.RespawningTeam -= _events.OnTeamRespawn;
+            _serverEvents.UnregisterEvents();
         }
     }
 }
